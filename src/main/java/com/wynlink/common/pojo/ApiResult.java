@@ -1,10 +1,15 @@
 package com.wynlink.common.pojo;
 
 import cn.hutool.json.JSONUtil;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
-public class ApiResult {
+@ApiModel("返回响应数据")
+public class ApiResult implements Serializable {
 
     public static int SC_SUCCESS = 0; // 成功=0；
     public static int SC_FAILED = 1; // 失败=1；
@@ -50,10 +55,19 @@ public class ApiResult {
     public static int SC_GATEWAY_TIMEOUT = 504; // 网关超时=504；
     public static int SC_HTTP_VERSION_NOT_SUPPORTED = 505; // 不支持HTTP_VERSION_=505；
 
+    @ApiModelProperty(value = "错误信息")
     private String msg;
+
+    @ApiModelProperty(value = "是否成功")
     private boolean success;
+
+    @ApiModelProperty(value = "错误编号")
     private int code;
-    private long count; // 数据记录数
+
+    @ApiModelProperty(value = "数据记录数")
+    private long count;
+
+    @ApiModelProperty(value = "返回对象")
     private Object data;
 
     public static ApiResult success(){
