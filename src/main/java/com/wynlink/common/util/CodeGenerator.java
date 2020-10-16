@@ -53,7 +53,7 @@ public class CodeGenerator {
         // 包配置
         PackageConfig pc = new PackageConfig();
         pc.setParent("com.wynlink.lsa");
-        pc.setModuleName("sys"); // 模块名
+        pc.setModuleName("core"); // 模块名
         pc.setEntity("model");
         mpg.setPackageInfo(pc);
 
@@ -64,7 +64,7 @@ public class CodeGenerator {
         strategy.setEntityLombokModel(true);
         strategy.setSuperEntityClass(BaseModel.class);
         strategy.setRestControllerStyle(true);
-        strategy.setInclude(new String[]{"t_sys_user"});
+        strategy.setInclude(new String[]{"t_core_label_system_info", "t_core_label_system_node"});
 //        strategy.setControllerMappingHyphenStyle(true);
         strategy.setTablePrefix("t_");
         mpg.setStrategy(strategy);
