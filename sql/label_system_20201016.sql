@@ -1,10 +1,5 @@
 /*
  Navicat Premium Data Transfer
-
- Source Server         : 192.168.137.100-mysql
- Source Server Type    : MySQL
- Source Server Version : 50731
- Source Host           : 192.168.137.100:3306
  Source Schema         : label_system
 
  Target Server Type    : MySQL
