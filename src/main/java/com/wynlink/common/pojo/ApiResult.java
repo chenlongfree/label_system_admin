@@ -72,6 +72,7 @@ public class ApiResult implements Serializable {
 
     public static ApiResult success(){
         ApiResult rs = new ApiResult();
+        rs.setMsg("处理正常");
         rs.setCode(SC_SUCCESS);
         rs.setSuccess(true);
         return rs;
@@ -92,6 +93,7 @@ public class ApiResult implements Serializable {
 
     public static ApiResult failed(){
         ApiResult rs = new ApiResult();
+        rs.setMsg("处理失败");
         rs.setCode(SC_FAILED);
         rs.setSuccess(false);
         return rs;

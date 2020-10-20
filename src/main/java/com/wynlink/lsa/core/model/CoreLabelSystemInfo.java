@@ -13,6 +13,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotEmpty;
+
 /**
  * <p>
  * 标签体系表
@@ -38,12 +40,17 @@ public class CoreLabelSystemInfo extends BaseModel<CoreLabelSystemInfo> {
     /**
      * 标签体系名称
      */
+    @NotEmpty(message = "标签体系名称不能为空")
     private String name;
+
+    private Integer auditState;
 
     /**
      * 状态
      */
     private Integer status;
+
+    private Integer operate;
 
     /**
      * 创建时间
@@ -75,6 +82,8 @@ public class CoreLabelSystemInfo extends BaseModel<CoreLabelSystemInfo> {
             queryWrapper.eq("name", this.name);
         if(this.status != null)
             queryWrapper.eq("status", this.status);
+        if(this.auditState != null)
+            queryWrapper.eq("audit_state", this.auditState);
         if(this.createdAt != null)
             queryWrapper.eq("created_at", this.createdAt);
         if(StrUtil.isNotBlank(this.createdBy))

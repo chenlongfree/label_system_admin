@@ -1,6 +1,8 @@
 package com.wynlink.lsa.core.model;
 
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
@@ -10,6 +12,8 @@ import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * <p>
@@ -35,6 +39,7 @@ public class CoreLabelSystemNode extends BaseModel<CoreLabelSystemNode> {
     /**
      * 标签体系id
      */
+    @NotNull
     private Long infoId;
 
     /**
@@ -44,12 +49,15 @@ public class CoreLabelSystemNode extends BaseModel<CoreLabelSystemNode> {
 
     /**
      * 上级id
+     * 更新时忽律null值判断
      */
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private Long pid;
 
     /**
      * 标签名称
      */
+    @NotNull
     private String name;
 
     /**
@@ -61,6 +69,8 @@ public class CoreLabelSystemNode extends BaseModel<CoreLabelSystemNode> {
      * 模型参数id
      */
     private Long modelParamId;
+
+    private Integer operate;
 
     /**
      * 状态

@@ -21,18 +21,18 @@ public class RedisSubject {
     RedisTemplate<String, SysUser> redisTemplate;
 
     public void setSysUser (String token, SysUser sysUser) {
-        redisTemplate.opsForValue().set(Constants.HRADER_TOKEN + ":" + token, sysUser, 2, TimeUnit.HOURS);
+        redisTemplate.opsForValue().set(Constants.HEADER_TOKEN + ":" + token, sysUser, 2, TimeUnit.HOURS);
     }
 
     public SysUser getSysUser() {
         ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = servletRequestAttributes.getRequest();
-        String token = request.getHeader(Constants.HRADER_TOKEN);
-        return redisTemplate.opsForValue().get(Constants.HRADER_TOKEN + ":" + getToken());
+        String token = request.getHeader(Constants.HEADER_TOKEN);
+        return redisTemplate.opsForValue().get(Constants.HEADER_TOKEN + ":" + getToken());
     }
 
     public boolean remove() {
-        return redisTemplate.delete(Constants.HRADER_TOKEN + ":" + getToken());
+        return redisTemplate.delete(Constants.HEADER_TOKEN + ":" + getToken());
     }
 
     /**
@@ -40,7 +40,7 @@ public class RedisSubject {
      * @return
      */
     public boolean expire() {
-        return !redisTemplate.hasKey(Constants.HRADER_TOKEN + ":" + getToken());
+        return !redisTemplate.hasKey(Constants.HEADER_TOKEN + ":" + getToken());
     }
 
     /**
@@ -50,6 +50,6 @@ public class RedisSubject {
     public String getToken() {
         ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = servletRequestAttributes.getRequest();
-        return request.getHeader(Constants.HRADER_TOKEN);
+        return request.getHeader(Constants.HEADER_TOKEN);
     }
 }

@@ -1,4 +1,4 @@
-package com.wynlink.common.config;
+package com.wynlink.common.redis;
 
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
