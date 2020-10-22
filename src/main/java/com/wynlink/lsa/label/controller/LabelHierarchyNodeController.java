@@ -1,14 +1,14 @@
-package com.wynlink.lsa.core.controller;
+package com.wynlink.lsa.label.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.wynlink.common.Constants;
 import com.wynlink.common.pojo.ApiResult;
 import com.wynlink.common.secure.RedisSubject;
-import com.wynlink.lsa.core.model.CoreLabelSystemInfo;
-import com.wynlink.lsa.core.model.CoreLabelSystemNode;
-import com.wynlink.lsa.core.service.ICoreLabelSystemInfoService;
-import com.wynlink.lsa.core.service.ICoreLabelSystemNodeService;
+import com.wynlink.lsa.label.model.LabelHierarchyInfo;
+import com.wynlink.lsa.label.model.LabelHierarchyNode;
+import com.wynlink.lsa.label.service.ILabelHierarchyInfoService;
+import com.wynlink.lsa.label.service.ILabelHierarchyNodeService;
 import com.wynlink.lsa.sys.model.SysUser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -26,30 +26,30 @@ import java.util.List;
  * </p>
  *
  * @author ChenLong
- * @since 2020-09-30
+ * @since 2020-10-22
  */
 @Api("标签体系节点表 前端控制器")
 @RestController
-@RequestMapping("/core/label/system/node")
-public class CoreLabelSystemNodeController {
+@RequestMapping("/label/hierarchy/node")
+public class LabelHierarchyNodeController {
 
     @Resource
     RedisSubject redisSubject;
 
     @Resource
-    ICoreLabelSystemNodeService coreLabelSystemNodeService;
+    ILabelHierarchyInfoService labelHierarchyInfoService;
 
     @Resource
-    ICoreLabelSystemInfoService coreLabelSystemInfoService;
+    ILabelHierarchyNodeService labelHierarchyNodeService;
 
     @ApiOperation(value = "查询标签体系下的所有节点")
     @ApiImplicitParam(name = "infoId", value = "标签体系Id", required = true, paramType = "path", dataType = "Integer")
     @GetMapping("/list/{infoId}")
     public ApiResult list (@PathVariable Long infoId) {
 
-        CoreLabelSystemNode entity = new CoreLabelSystemNode();
+        LabelHierarchyNode entity = new LabelHierarchyNode();
         entity.setInfoId(infoId);
-        List<CoreLabelSystemNode> list = coreLabelSystemNodeService.list(entity.getQueryWrapper());
+        List<LabelHierarchyNode> list = labelHierarchyNodeService.list(entity.getQueryWrapper());
         return ApiResult.success(list.size(), list);
     }
 
@@ -60,16 +60,16 @@ public class CoreLabelSystemNodeController {
             @ApiImplicitParam(name = "name", value = "节点名称", required = true, paramType = "query", dataType = "String"),
     })
     @PostMapping("/add")
-    public ApiResult add (@RequestBody @Valid CoreLabelSystemNode entity) {
+    public ApiResult add (@RequestBody @Valid LabelHierarchyNode entity) {
 
-        int count = coreLabelSystemInfoService.count(new QueryWrapper<CoreLabelSystemInfo>().eq("id", entity.getInfoId()));
+        int count = labelHierarchyInfoService.count(new QueryWrapper<LabelHierarchyInfo>().eq("id", entity.getInfoId()));
         if(count == 0) return ApiResult.failed("标签体系不存在");
 
         SysUser sysUser = redisSubject.getSysUser();
         entity.setCreatedBy(sysUser.getUsername());
         entity.setOperate(Constants.Operate.INSERT);
         entity.setStatus(Constants.Status.DISABLED);
-        boolean save = coreLabelSystemNodeService.save(entity);
+        boolean save = labelHierarchyNodeService.save(entity);
         return save ? ApiResult.success(entity.getId()) : ApiResult.failed();
     }
 
@@ -78,7 +78,7 @@ public class CoreLabelSystemNodeController {
     @GetMapping("/get/{id}")
     public ApiResult get (@PathVariable Long id) {
 
-        CoreLabelSystemNode data = coreLabelSystemNodeService.getById(id);
+        LabelHierarchyNode data = labelHierarchyNodeService.getById(id);
         return ApiResult.success(data);
     }
 
@@ -89,16 +89,16 @@ public class CoreLabelSystemNodeController {
             @ApiImplicitParam(name = "name", value = "节点名称", required = true, paramType = "query", dataType = "String"),
     })
     @PostMapping("/edit")
-    public ApiResult edit (@RequestBody @Valid CoreLabelSystemNode entity) {
+    public ApiResult edit (@RequestBody @Valid LabelHierarchyNode entity) {
 
-        if(coreLabelSystemInfoService.getById(entity.getInfoId()) == null) return ApiResult.failed("标签体系不存在");
-        if(coreLabelSystemNodeService.getById(entity.getId()) == null) return ApiResult.failed("节点不存在");
+        if(labelHierarchyInfoService.getById(entity.getInfoId()) == null) return ApiResult.failed("标签体系不存在");
+        if(labelHierarchyNodeService.getById(entity.getId()) == null) return ApiResult.failed("节点不存在");
 
         SysUser sysUser = redisSubject.getSysUser();
         entity.setUpdatedBy(sysUser.getUsername());
         entity.setOperate(Constants.Operate.UPDATE);
         entity.setStatus(Constants.Status.DISABLED);
-        boolean save = coreLabelSystemNodeService.updateById(entity);
+        boolean save = labelHierarchyNodeService.updateById(entity);
         return save ? ApiResult.success(entity.getId()) : ApiResult.failed();
     }
 
@@ -107,7 +107,7 @@ public class CoreLabelSystemNodeController {
     @DeleteMapping("/del/{id}")
     public ApiResult del (@PathVariable Long id) {
 
-        CoreLabelSystemNode byId = coreLabelSystemNodeService.getById(id);
+        LabelHierarchyNode byId = labelHierarchyNodeService.getById(id);
         if(byId == null) return ApiResult.failed("数据不存在");
 
         SysUser sysUser = redisSubject.getSysUser();
@@ -115,7 +115,7 @@ public class CoreLabelSystemNodeController {
 
         byId.setOperate(Constants.Operate.DELETE);
         byId.setStatus(Constants.Status.DISABLED);
-        boolean b = coreLabelSystemNodeService.updateById(byId);
+        boolean b = labelHierarchyNodeService.updateById(byId);
         return b ? ApiResult.success(id) : ApiResult.failed();
     }
 }

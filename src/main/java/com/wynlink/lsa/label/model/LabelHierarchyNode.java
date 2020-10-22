@@ -1,8 +1,6 @@
-package com.wynlink.lsa.core.model;
+package com.wynlink.lsa.label.model;
 
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.annotation.FieldStrategy;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
@@ -13,21 +11,19 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import javax.validation.constraints.NotNull;
-
 /**
  * <p>
  * 标签体系节点表
  * </p>
  *
  * @author ChenLong
- * @since 2020-09-30
+ * @since 2020-10-22
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("t_core_label_system_node")
-public class CoreLabelSystemNode extends BaseModel<CoreLabelSystemNode> {
+@TableName("t_label_hierarchy_node")
+public class LabelHierarchyNode extends BaseModel<LabelHierarchyNode> {
 
     private static final long serialVersionUID=1L;
 
@@ -39,7 +35,6 @@ public class CoreLabelSystemNode extends BaseModel<CoreLabelSystemNode> {
     /**
      * 标签体系id
      */
-    @NotNull
     private Long infoId;
 
     /**
@@ -49,15 +44,12 @@ public class CoreLabelSystemNode extends BaseModel<CoreLabelSystemNode> {
 
     /**
      * 上级id
-     * 更新时忽律null值判断
      */
-    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private Long pid;
 
     /**
      * 标签名称
      */
-    @NotNull
     private String name;
 
     /**
@@ -70,6 +62,9 @@ public class CoreLabelSystemNode extends BaseModel<CoreLabelSystemNode> {
      */
     private Long modelParamId;
 
+    /**
+     * 操作
+     */
     private Integer operate;
 
     /**
@@ -80,14 +75,14 @@ public class CoreLabelSystemNode extends BaseModel<CoreLabelSystemNode> {
     /**
      * 创建时间
      */
-    private LocalDateTime createdAt;
+    private LocalDateTime createTime;
 
     private String createdBy;
 
     /**
      * 更新时间
      */
-    private LocalDateTime updatedAt;
+    private LocalDateTime updateTime;
 
     private String updatedBy;
 
@@ -99,8 +94,8 @@ public class CoreLabelSystemNode extends BaseModel<CoreLabelSystemNode> {
 
 
     @Override
-    public QueryWrapper<CoreLabelSystemNode> getQueryWrapper() {
-        QueryWrapper<CoreLabelSystemNode> queryWrapper = super.getQueryWrapper();
+    public QueryWrapper<LabelHierarchyNode> getQueryWrapper() {
+        QueryWrapper<LabelHierarchyNode> queryWrapper = super.getQueryWrapper();
         if(this.id != null)
             queryWrapper.eq("id", this.id);
         if(this.infoId != null)
@@ -115,14 +110,16 @@ public class CoreLabelSystemNode extends BaseModel<CoreLabelSystemNode> {
             queryWrapper.eq("model_id", this.modelId);
         if(this.modelParamId != null)
             queryWrapper.eq("model_param_id", this.modelParamId);
+        if(this.operate != null)
+            queryWrapper.eq("operate", this.operate);
         if(this.status != null)
             queryWrapper.eq("status", this.status);
-        if(this.createdAt != null)
-            queryWrapper.eq("created_at", this.createdAt);
+        if(this.createTime != null)
+            queryWrapper.eq("create_time", this.createTime);
         if(StrUtil.isNotBlank(this.createdBy))
             queryWrapper.eq("created_by", this.createdBy);
-        if(this.updatedAt != null)
-            queryWrapper.eq("updated_at", this.updatedAt);
+        if(this.updateTime != null)
+            queryWrapper.eq("update_time", this.updateTime);
         if(StrUtil.isNotBlank(this.updatedBy))
             queryWrapper.eq("updated_by", this.updatedBy);
         return queryWrapper;

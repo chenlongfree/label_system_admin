@@ -18,7 +18,7 @@ public class CodeGenerator {
 
         // 全局配置
         GlobalConfig gc = new GlobalConfig();
-        gc.setOutputDir("d:/code");
+        gc.setOutputDir("c:/code");
         gc.setAuthor("ChenLong");
         gc.setOpen(false);
         gc.setActiveRecord(true);
@@ -53,7 +53,7 @@ public class CodeGenerator {
         // 包配置
         PackageConfig pc = new PackageConfig();
         pc.setParent("com.wynlink.lsa");
-        pc.setModuleName("core"); // 模块名
+        pc.setModuleName("sys"); // 模块名
         pc.setEntity("model");
         mpg.setPackageInfo(pc);
 
@@ -64,7 +64,7 @@ public class CodeGenerator {
         strategy.setEntityLombokModel(true);
         strategy.setSuperEntityClass(BaseModel.class);
         strategy.setRestControllerStyle(true);
-        strategy.setInclude(new String[]{"t_core_label_system_info", "t_core_label_system_node"});
+        strategy.setInclude(new String[]{"t_sys_dict_info", "t_sys_dict_item"});
 //        strategy.setControllerMappingHyphenStyle(true);
         strategy.setTablePrefix("t_");
         mpg.setStrategy(strategy);

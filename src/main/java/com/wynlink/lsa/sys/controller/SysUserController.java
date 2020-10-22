@@ -55,7 +55,8 @@ public class SysUserController {
             one.setRoles(roles);
             String token = UUID.randomUUID().toString();
             redisSubject.setSysUser(token, one);
-            return ApiResult.success(token);
+            one.setToken(token);
+            return ApiResult.success(one);
         }
     }
 

@@ -33,6 +33,12 @@ public class SysUser extends BaseModel<SysUser> {
 
     private static final long serialVersionUID=1L;
 
+    /**
+     * 用户登录Token
+     */
+    @TableField(exist = false)
+    private String token;
+
     /** 角色集合 */
     @TableField(exist = false)
     private List<String> roles;
