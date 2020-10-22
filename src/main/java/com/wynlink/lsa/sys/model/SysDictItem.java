@@ -53,6 +53,11 @@ public class SysDictItem extends BaseModel<SysDictItem> {
     private String name;
 
     /**
+     * 排序
+     */
+    private Integer rank;
+
+    /**
      * 状态
      */
     private Integer status;

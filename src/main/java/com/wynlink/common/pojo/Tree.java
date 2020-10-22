@@ -13,6 +13,7 @@ public class Tree {
     private String name;
     private String value;
     private String parent;
+    private Integer sort;
 
     private List<Tree> children;
 

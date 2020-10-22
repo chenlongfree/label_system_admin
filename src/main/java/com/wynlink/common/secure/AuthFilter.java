@@ -28,7 +28,7 @@ public class AuthFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         String requestURI = req.getRequestURI();
 
-        if (requestURI.endsWith("login")) {
+        if (requestURI.endsWith("login") || requestURI.contains("swagger")) {
             chain.doFilter(request, response);
         } else if(redisSubject.getToken() == null) {
             response.setCharacterEncoding("utf-8");

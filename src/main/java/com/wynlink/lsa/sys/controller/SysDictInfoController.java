@@ -1,9 +1,26 @@
 package com.wynlink.lsa.sys.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.wynlink.common.pojo.ApiResult;
+import com.wynlink.common.pojo.Tree;
+import com.wynlink.common.util.TreeUtil;
+import com.wynlink.lsa.sys.model.SysDictItem;
+import com.wynlink.lsa.sys.service.ISysDictInfoService;
+import com.wynlink.lsa.sys.service.ISysDictItemService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * <p>
@@ -13,9 +30,30 @@ import org.springframework.web.bind.annotation.RestController;
  * @author ChenLong
  * @since 2020-10-22
  */
+@Api("字典管理接口")
 @RestController
-@RequestMapping("/sys/sysDictInfo")
+@RequestMapping("/sys/dict")
 public class SysDictInfoController {
 
-}
+    @Resource
+    ISysDictItemService sysDictItemService;
 
+    @ApiOperation(value = "获取字典树桩结构")
+    @ApiImplicitParam(name = "dictCode", value = "字典编码", required = true, paramType = "path", dataType = "String")
+    @GetMapping("/tree/{dictCode}")
+    public ApiResult tree(@PathVariable String dictCode) {
+        List<SysDictItem> dict_code = sysDictItemService.list(new QueryWrapper<SysDictItem>().eq("dict_code", dictCode));
+        List<Tree> trees = new ArrayList<>();
+        for (SysDictItem sysDictItem : dict_code) {
+            Tree tree = new Tree();
+            tree.setName(sysDictItem.getName());
+            tree.setValue(sysDictItem.getCode());
+            tree.setParent(sysDictItem.getPcode());
+            tree.setSort(sysDictItem.getRank());
+            trees.add(tree);
+        }
+        trees.sort(Comparator.comparing(Tree::getSort));
+        List<Tree> treeData = TreeUtil.getTreeData(trees);
+        return ApiResult.success(treeData.size(), treeData);
+    }
+}

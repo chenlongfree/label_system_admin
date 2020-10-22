@@ -11,9 +11,9 @@ public class Constants {
      * 状态
      */
     public static class Status{
-        public static final Integer DELETED = -1; // 删除
-        public static final Integer ENABLED = 0; // 启用
-        public static final Integer DISABLED = 1; // 禁用
+        public static final Integer DELETED = 0; // 删除
+        public static final Integer ENABLED = 1; // 启用
+        public static final Integer DISABLED = 2; // 禁用
     }
 
     /**
