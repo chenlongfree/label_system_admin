@@ -1,6 +1,7 @@
 package com.wynlink.lsa.label.model;
 
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -11,6 +12,8 @@ import java.time.LocalDateTime;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.wynlink.common.mybatis.BaseModel;
 import java.io.Serializable;
+import java.util.List;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -30,6 +33,9 @@ import lombok.experimental.Accessors;
 public class LabelHierarchyInfo extends BaseModel<LabelHierarchyInfo> {
 
     private static final long serialVersionUID=1L;
+
+    @TableField(exist = false)
+    private List<LabelHierarchyNode> nodes;
 
     /**
      * 主键

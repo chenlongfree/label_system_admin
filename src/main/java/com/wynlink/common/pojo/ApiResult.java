@@ -56,7 +56,7 @@ public class ApiResult implements Serializable {
     public static int SC_HTTP_VERSION_NOT_SUPPORTED = 505; // 不支持HTTP_VERSION_=505；
 
     @ApiModelProperty(value = "错误信息")
-    private String msg;
+    private String message;
 
     @ApiModelProperty(value = "是否成功")
     private boolean success;
@@ -72,7 +72,7 @@ public class ApiResult implements Serializable {
 
     public static ApiResult success(){
         ApiResult rs = new ApiResult();
-        rs.setMsg("处理正常");
+        rs.setMessage("处理正常");
         rs.setCode(SC_SUCCESS);
         rs.setSuccess(true);
         return rs;
@@ -93,7 +93,7 @@ public class ApiResult implements Serializable {
 
     public static ApiResult failed(){
         ApiResult rs = new ApiResult();
-        rs.setMsg("处理失败");
+        rs.setMessage("处理失败");
         rs.setCode(SC_FAILED);
         rs.setSuccess(false);
         return rs;
@@ -101,7 +101,7 @@ public class ApiResult implements Serializable {
 
     public static ApiResult failed(String msg){
         ApiResult rs = failed();
-        rs.setMsg(msg);
+        rs.setMessage(msg);
         return rs;
     }
 
@@ -115,7 +115,7 @@ public class ApiResult implements Serializable {
         ApiResult rs = new ApiResult();
         rs.setCode(SC_EXPECTATION_FAILED);
         rs.setSuccess(false);
-        rs.setMsg(msg);
+        rs.setMessage(msg);
         return rs;
     }
 

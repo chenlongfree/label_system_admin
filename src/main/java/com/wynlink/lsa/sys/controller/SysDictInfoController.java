@@ -4,6 +4,7 @@ package com.wynlink.lsa.sys.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.wynlink.common.pojo.ApiResult;
 import com.wynlink.common.pojo.Tree;
+import com.wynlink.common.redis.RedisService;
 import com.wynlink.common.util.TreeUtil;
 import com.wynlink.lsa.sys.model.SysDictItem;
 import com.wynlink.lsa.sys.service.ISysDictInfoService;
@@ -18,9 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * <p>
@@ -38,22 +37,47 @@ public class SysDictInfoController {
     @Resource
     ISysDictItemService sysDictItemService;
 
+    @Resource
+    RedisService redisService;
+
     @ApiOperation(value = "获取字典树桩结构")
     @ApiImplicitParam(name = "dictCode", value = "字典编码", required = true, paramType = "path", dataType = "String")
     @GetMapping("/tree/{dictCode}")
     public ApiResult tree(@PathVariable String dictCode) {
-        List<SysDictItem> dict_code = sysDictItemService.list(new QueryWrapper<SysDictItem>().eq("dict_code", dictCode));
-        List<Tree> trees = new ArrayList<>();
-        for (SysDictItem sysDictItem : dict_code) {
-            Tree tree = new Tree();
-            tree.setName(sysDictItem.getName());
-            tree.setValue(sysDictItem.getCode());
-            tree.setParent(sysDictItem.getPcode());
-            tree.setSort(sysDictItem.getRank());
-            trees.add(tree);
+
+        List<Tree> treeData = (List<Tree>) redisService.get("tree:"+dictCode);
+        if(treeData == null) {
+            List<SysDictItem> dict_code = sysDictItemService.list(new QueryWrapper<SysDictItem>().eq("dict_code", dictCode));
+            List<Tree> trees = new ArrayList<>();
+            for (SysDictItem sysDictItem : dict_code) {
+                Tree tree = new Tree();
+                tree.setName(sysDictItem.getName());
+                tree.setValue(sysDictItem.getCode());
+                tree.setParent(sysDictItem.getPcode());
+                tree.setSort(sysDictItem.getSequence());
+                trees.add(tree);
+            }
+            trees.sort(Comparator.comparing(Tree::getSort));
+            treeData = TreeUtil.getTreeData(trees);
+
+            redisService.set("tree:"+dictCode, treeData);
         }
-        trees.sort(Comparator.comparing(Tree::getSort));
-        List<Tree> treeData = TreeUtil.getTreeData(trees);
         return ApiResult.success(treeData.size(), treeData);
+    }
+
+    @ApiOperation(value = "获取全部字典项")
+    @ApiImplicitParam(name = "dictCode", value = "字典编码", required = true, paramType = "path", dataType = "String")
+    @GetMapping("/map/{dictCode}")
+    public ApiResult dictMap(@PathVariable String dictCode) {
+
+        Map<String, Object> map = (Map<String, Object>) redisService.get("dict:"+dictCode);
+        if(map == null) {
+            List<SysDictItem> dict_code = sysDictItemService.list(new QueryWrapper<SysDictItem>().eq("dict_code", dictCode));
+            map = new HashMap<>();
+            for (SysDictItem sysDictItem : dict_code) {
+                map.put(sysDictItem.getCode(), sysDictItem.getName());
+            }
+        }
+        return ApiResult.success(map.size(), map);
     }
 }

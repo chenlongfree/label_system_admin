@@ -1,12 +1,15 @@
 package com.wynlink.lsa.label.model;
 
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import java.time.LocalDateTime;
 import com.wynlink.common.mybatis.BaseModel;
 import java.io.Serializable;
+import java.util.List;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -27,6 +30,12 @@ public class LabelHierarchyNode extends BaseModel<LabelHierarchyNode> {
 
     private static final long serialVersionUID=1L;
 
+    @TableField(exist = false)
+    private List<LabelHierarchyNode> children;
+
+    @TableField(exist = false)
+    private Integer notDelete;
+
     /**
      * 主键
      */
@@ -36,11 +45,6 @@ public class LabelHierarchyNode extends BaseModel<LabelHierarchyNode> {
      * 标签体系id
      */
     private Long infoId;
-
-    /**
-     * 标签性质
-     */
-    private String nature;
 
     /**
      * 上级id
@@ -100,8 +104,6 @@ public class LabelHierarchyNode extends BaseModel<LabelHierarchyNode> {
             queryWrapper.eq("id", this.id);
         if(this.infoId != null)
             queryWrapper.eq("info_id", this.infoId);
-        if(StrUtil.isNotBlank(this.nature))
-            queryWrapper.eq("nature", this.nature);
         if(this.pid != null)
             queryWrapper.eq("pid", this.pid);
         if(StrUtil.isNotBlank(this.name))
@@ -122,6 +124,9 @@ public class LabelHierarchyNode extends BaseModel<LabelHierarchyNode> {
             queryWrapper.eq("update_time", this.updateTime);
         if(StrUtil.isNotBlank(this.updatedBy))
             queryWrapper.eq("updated_by", this.updatedBy);
+        if(notDelete != null && notDelete == 1) {
+            queryWrapper.ne("status", 0);
+        }
         return queryWrapper;
     }
 }

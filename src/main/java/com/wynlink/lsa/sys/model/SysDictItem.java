@@ -55,7 +55,7 @@ public class SysDictItem extends BaseModel<SysDictItem> {
     /**
      * 排序
      */
-    private Integer rank;
+    private Integer sequence;
 
     /**
      * 状态
