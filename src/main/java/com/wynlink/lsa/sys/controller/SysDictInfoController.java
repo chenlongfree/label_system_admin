@@ -51,8 +51,8 @@ public class SysDictInfoController {
             List<Tree> trees = new ArrayList<>();
             for (SysDictItem sysDictItem : dict_code) {
                 Tree tree = new Tree();
-                tree.setName(sysDictItem.getName());
-                tree.setValue(sysDictItem.getCode());
+                tree.setId(sysDictItem.getName());
+                tree.setLabel(sysDictItem.getCode());
                 tree.setParent(sysDictItem.getPcode());
                 tree.setSort(sysDictItem.getSequence());
                 trees.add(tree);

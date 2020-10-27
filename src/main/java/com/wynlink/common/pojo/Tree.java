@@ -11,16 +11,16 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Tree implements Serializable {
-    private String name;
-    private String value;
+    private String label;
+    private String id;
     private String parent;
     private Integer sort;
 
     private List<Tree> children;
 
-    public Tree(String name, String value, String parent){
-        this.name = name;
-        this.value = value;
+    public Tree(String id, String label, String parent){
+        this.id = id;
+        this.label = label;
         this.parent = parent;
     }
 }

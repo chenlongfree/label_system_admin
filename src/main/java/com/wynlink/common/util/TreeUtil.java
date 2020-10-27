@@ -11,8 +11,8 @@ public class TreeUtil {
         List<Tree> modelTrees=new ArrayList<>();
         for(Tree tree:trees) {
             if(tree.getParent()==null) {
-                Tree modelTree=new Tree(tree.getName(), tree.getValue(), tree.getParent());
-                modelTree.setChildren(getChildrenNode(modelTree.getValue(), trees));
+                Tree modelTree=new Tree(tree.getId(), tree.getLabel(), tree.getParent());
+                modelTree.setChildren(getChildrenNode(modelTree.getId(), trees));
                 modelTrees.add(modelTree);
             }
         }
@@ -27,8 +27,8 @@ public class TreeUtil {
                 continue;
             }
             if(value.equals(tree.getParent())){
-                Tree modelTree=new Tree(tree.getName(), tree.getValue(), tree.getParent());
-                modelTree.setChildren(getChildrenNode(tree.getValue(), trees));
+                Tree modelTree=new Tree(tree.getId(), tree.getLabel(), tree.getParent());
+                modelTree.setChildren(getChildrenNode(tree.getId(), trees));
                 modelTrees.add(modelTree);
             }
         }

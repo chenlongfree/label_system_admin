@@ -1,11 +1,14 @@
 package com.wynlink.lsa.label.controller;
 
 
+import cn.hutool.core.convert.Convert;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wynlink.common.Constants;
 import com.wynlink.common.pojo.ApiResult;
 import com.wynlink.common.pojo.Tree;
 import com.wynlink.common.secure.RedisSubject;
+import com.wynlink.common.util.TreeUtil;
 import com.wynlink.lsa.label.model.LabelHierarchyInfo;
 import com.wynlink.lsa.label.model.LabelHierarchyNode;
 import com.wynlink.lsa.label.service.ILabelHierarchyInfoService;
@@ -98,19 +101,17 @@ public class LabelHierarchyInfoController {
     @GetMapping("/tree/{id}")
     public ApiResult tree (@PathVariable Long id) {
 
-        List<LabelHierarchyNode> trees = new ArrayList<>();
+        List<Tree> trees = new ArrayList<>();
         if(id != null) {
             LabelHierarchyNode query = new LabelHierarchyNode();
             query.setInfoId(id);
             query.setNotDelete(1);
             List<LabelHierarchyNode> nodes = labelHierarchyNodeService.list(query.getQueryWrapper());
             for (LabelHierarchyNode node : nodes) {
-                if(node.getPid() == null) {
-                    node.setChildren(getChildrenNode(node.getId(), nodes));
-                    trees.add(node);
-                }
+                trees.add(new Tree(node.getId().toString(), node.getName(),  Convert.toStr(node.getPid(), null)));
             }
         }
+        trees = TreeUtil.getTreeData(trees);
         return ApiResult.success(trees);
     }
 
